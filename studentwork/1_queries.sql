@@ -26,14 +26,7 @@ CREATE INDEX idx_posts_body_search ON posts USING GIN(to_tsvector('english', bod
 -- this takes ~0.084 second as opposed to ~1.7 seconds from the previous search
 -- amount of entries = 7584 
 -- due to the nature of a full text search, the search might exclude some entries based on some lingustics
-SELECT postid, id AS comment_id, NULL AS title, text
-FROM comments 
-WHERE to_tsvector('english', text) @@ to_tsquery('english', 'postgres')
-UNION
-SELECT id AS postid, NULL AS comment_id, title, NULL AS text
-FROM posts 
-WHERE to_tsvector('english', title) @@ to_tsquery('english', 'postgres')
-ORDER BY postid;
+
 
 --to drop this index if you don't need it anymore
 DROP INDEX idx_comments_text_search
